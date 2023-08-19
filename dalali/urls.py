@@ -5,11 +5,9 @@ from rest_framework.routers import DefaultRouter
 from .views import *
 
 router = DefaultRouter()
-# router.register(r'users', UserViewSet, basename='user')
-# router.register(r'create_user', RegisterUserViewSet, basename='create_user')
-# router.register(r'categories', CategorViewSet)
-# router.register(r'products', ProductViewSet)
-# router.register(r'create_product', ProductCreateViewSet, basename='create_food_item')
-# router.register(r'create_category', CategoryCreateViewSet, basename='create_category')
+router.register(r'users', OwnerViewSet, basename="users")
+router.register(r'properties', PropertyViewSet, basename='properties')
+router.register(r'property_types', PropertyTypeViewSet, basename='propertyTypes')
+router.register(r'tennant', TannantViewSet, basename='tennant')
 
 urlpatterns = router.urls

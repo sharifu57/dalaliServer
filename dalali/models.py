@@ -29,7 +29,7 @@ IDTYPE = (
 
 
 class UserProfile(MainModel):
-    user = models.ForeignKey(User, related_name='profile', on_delete=models.CASCADE) #related table Owner
+    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE) #related table Owner
     phone_number = models.CharField(max_length=300, blank=True, null=True)
     gender = models.IntegerField(choices=((1, 'Male'), (2, 'Female')), null=True, blank=True)
     address = models.CharField(max_length=300, null=True, blank=True)
@@ -39,7 +39,7 @@ class UserProfile(MainModel):
 
     def __str__(self):
 
-        return self.phone_number
+        return self.user.username if user else ''
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
@@ -80,6 +80,7 @@ class Property(MainModel):
 class PropertyType(MainModel):
     title = models.CharField(max_length=300, blank=True, null=True)
     description = models.CharField(max_length=300, null=True, blank=True)
+    icon = models.ImageField(upload_to='images/%Y/%m/%d',null=True, blank=True)
 
     def __str__(self):
 
@@ -113,6 +114,8 @@ class Tennant(MainModel):
     last_name = models.CharField(max_length=300, null=True, blank=True)
     email = models.EmailField(unique=True, blank=True, null=True)
     phone_number = models.CharField(max_length=20,blank=True, null=True)
+    otp = models.CharField(max_length=6, null=True, blank=True)
+    is_verified = models.BooleanField(default=False)
 
     def __str__(self):
 
