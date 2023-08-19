@@ -26,6 +26,24 @@ class PropertyTypeViewSet(viewsets.ModelViewSet):
     queryset = PropertyType.objects.filter(is_active=True, is_deleted=False).order_by('-created')
 
 
+class PropertiesViewSet(viewsets.GenericViewSet):
+    serializer_class = PropertySerializer
+    queryset = Property.objects.filter(is_active=True, is_deleted=False).order_by('-created')
+
+    @action(detail=True, methods=['get'])
+    def properties_by_owner_id(self, request, pk=None):
+        try:
+            owner = User.objects.get(id=pk)
+        except User.DoesNotExist:
+            return Response({'message': "Owner does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+        properties = Property.objects.filter(owner=owner, is_active=True, is_deleted=False).order_by("-created")
+        serializer = PropertySerializer(properties, many=True)
+
+        return Response({'data': serializer.data})
+        
+
+
 class TannantViewSet(viewsets.GenericViewSet):
     queryset = Tennant.objects.filter(is_active=True, is_deleted=False)
     serializer_class = TennantRequestOTPSerializer

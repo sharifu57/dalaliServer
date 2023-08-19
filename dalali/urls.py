@@ -9,5 +9,6 @@ router.register(r'users', OwnerViewSet, basename="users")
 router.register(r'properties', PropertyViewSet, basename='properties')
 router.register(r'property_types', PropertyTypeViewSet, basename='propertyTypes')
 router.register(r'tennant', TannantViewSet, basename='tennant')
+router.register(r'properties', PropertiesViewSet, basename='property')
 
 urlpatterns = router.urls

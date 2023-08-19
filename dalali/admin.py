@@ -4,6 +4,7 @@ from dalali.models import *
 # Register your models here.
 admin.site.register(UserProfile)
 admin.site.register(Property)
+admin.site.register(Location)
 admin.site.register(PropertyType)
 admin.site.register(Amenity)
 admin.site.register(PropertyAmenity)

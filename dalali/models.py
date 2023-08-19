@@ -69,11 +69,19 @@ class Property(MainModel):
     property_type = models.ForeignKey("dalali.PropertyType", null=True, blank=True, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     status = models.IntegerField(choices=PROPERTY_STATUS, null=True, blank=True)
-    location = models.CharField(choices=PROOPERTY_LOCATION, null=True, blank=True, max_length=200)
+    location = models.ForeignKey("dalali.Location", on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
 
         return self.property_number
+
+class Location(MainModel):
+    name = models.CharField(max_length=300, null=True, blank=True)
+    code = models.CharField(max_length=200, null=True, blank=True)
+
+    def __str__(self):
+
+        return f"{self.name} - {self.code}"
     
 
 

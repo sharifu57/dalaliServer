@@ -11,12 +11,20 @@ class OwnerSerializer(serializers.ModelSerializer):
 class PropertySerializer(serializers.ModelSerializer):
     class Meta:
         model = Property
-        fields = '__all__'
+        fields = [
+            'owner',
+            'title', 
+            'property_number',
+            'description', 
+            'property_type', 
+            'price', 'status', 
+            'location'
+        ]
 
 class PropertyTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PropertyType
-        fields = '__all__'
+        fields = ['title', 'description', 'icon']
 
 
 class TennantRequestOTPSerializer(serializers.ModelSerializer):
