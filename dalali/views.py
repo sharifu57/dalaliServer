@@ -107,7 +107,7 @@ class TannantViewSet(viewsets.GenericViewSet):
                 tennant.is_verified = True
                 tennant.save()
                 return Response(
-                    {
+                    {   
                         "status": 200,
                         "message": "Phone Number verified Successfully",
                         "data": serializer.data,
