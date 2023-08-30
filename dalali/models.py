@@ -110,7 +110,7 @@ class PropertyAmenity(MainModel):
         return self.id
 
 class PropertyPhoto(MainModel):
-    property = models.ForeignKey(Property, null=True, blank=True, on_delete=models.CASCADE)
+    property = models.ForeignKey(Property, null=True, related_name="photos", blank=True, on_delete=models.CASCADE)
     url = models.ImageField(upload_to='images/%Y/%m/%d',null=True, blank=True)
 
     def __str__(self):

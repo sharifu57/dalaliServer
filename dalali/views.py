@@ -21,17 +21,26 @@ class OwnerViewSet(viewsets.ModelViewSet):
 
 
 class PropertyViewSet(viewsets.ModelViewSet):
-    serializer_class = PropertySerializer
+    serializer_class = PropertyViewSerializer
     queryset = Property.objects.filter(is_active=True, is_deleted=False).order_by(
         "-created"
     )
 
 
+# class PropertyTypeViewSet(viewsets.ModelViewSet):
+#     serializer_class = PropertyTypeSerializer
+#     queryset = PropertyType.objects.filter(is_active=True, is_deleted=False).order_by(
+#         "-created"
+#     )
+
 class PropertyTypeViewSet(viewsets.ModelViewSet):
     serializer_class = PropertyTypeSerializer
-    queryset = PropertyType.objects.filter(is_active=True, is_deleted=False).order_by(
-        "-created"
-    )
+    queryset = PropertyType.objects.filter(is_active=True, is_deleted=False).order_by("-created")
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.prefetch_related('photos')  # Include related properties and their photos
+        return queryset
 
 
 class PropertiesViewSet(viewsets.GenericViewSet):
