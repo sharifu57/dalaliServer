@@ -103,7 +103,7 @@ class Amenity(MainModel):
         return self.name
     
 class PropertyAmenity(MainModel):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, blank=True, null=True)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name="amenities", blank=True, null=True)
     amenity = models.ForeignKey(Amenity, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):

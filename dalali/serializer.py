@@ -21,25 +21,18 @@ class PropertyPhotosSerializer(serializers.ModelSerializer):
 
 class PropertyViewSerializer(serializers.ModelSerializer):
     location = LocationSerializer()
-    # photos = PropertyPhotosSerializer()
+    photos = PropertyPhotosSerializer()
     class Meta:
         model = Property
         fields = '__all__'
 
         
 class PropertySerializer(serializers.ModelSerializer):
+    location = LocationSerializer()
+    owner = OwnerSerializer()
     class Meta:
         model = Property
-        fields = [
-            'id',
-            'owner',
-            'title', 
-            'property_number',
-            'description', 
-            'property_type', 
-            'price', 'status', 
-            'location'
-        ]
+        fields = '__all__'
 
 class PropertyTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -57,3 +50,13 @@ class TennantVerifyOTPSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tennant
         fields = [ 'otp','phone_number']
+
+###############################################################################33
+
+class PropertiesSerializer(serializers.ModelSerializer):
+    owner = OwnerSerializer()
+    location = LocationSerializer()
+    photos = PropertyPhotosSerializer(many=True, read_only=True)
+    class Meta:
+        model = Property
+        fields = "__all__"

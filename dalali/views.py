@@ -4,6 +4,7 @@ from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.contrib.auth.models import User
+from rest_framework import generics
 import random
 import string
 import pendulum
@@ -26,6 +27,11 @@ class PropertyViewSet(viewsets.ModelViewSet):
         "-created"
     )
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.prefetch_related("photos")
+        return queryset
+
 
 # class PropertyTypeViewSet(viewsets.ModelViewSet):
 #     serializer_class = PropertyTypeSerializer
@@ -33,14 +39,19 @@ class PropertyViewSet(viewsets.ModelViewSet):
 #         "-created"
 #     )
 
+
 class PropertyTypeViewSet(viewsets.ModelViewSet):
     serializer_class = PropertyTypeSerializer
-    queryset = PropertyType.objects.filter(is_active=True, is_deleted=False).order_by("-created")
+    queryset = PropertyType.objects.filter(is_active=True, is_deleted=False).order_by(
+        "-created"
+    )
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.prefetch_related('photos')  # Include related properties and their photos
-        return queryset
+
+class LocationsViewSet(viewsets.ModelViewSet):
+    serializer_class = LocationSerializer
+    queryset = Location.objects.filter(is_active=True, is_deleted=False).order_by(
+        "-name"
+    )
 
 
 class PropertiesViewSet(viewsets.GenericViewSet):
@@ -116,7 +127,7 @@ class TannantViewSet(viewsets.GenericViewSet):
                 tennant.is_verified = True
                 tennant.save()
                 return Response(
-                    {   
+                    {
                         "status": 200,
                         "message": "Phone Number verified Successfully",
                         "data": serializer.data,
@@ -131,3 +142,31 @@ class TannantViewSet(viewsets.GenericViewSet):
 
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LocationPropertiesViewSet(viewsets.GenericViewSet):
+    serializer_class = LocationSerializer
+    queryset = Location.objects.filter(is_active=True, is_deleted=False)
+
+    @action(detail=True, methods=["get"])
+    def get_properties(self, request, pk=None):
+        try:
+            location = Location.objects.get(id=pk)
+
+        except Location.DoesNotExist:
+            return Response(
+                {"message": "Location does not exist"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        properties = Property.objects.filter(
+            location=location, is_active=True, is_deleted=False
+        )
+
+        serializers = PropertiesSerializer(properties, many=True)
+        return Response({"data": serializers.data})
+
+
+class PropertyListViewSet(viewsets.ModelViewSet):
+    queryset = Property.objects.all()
+    serializer_class = PropertiesSerializer

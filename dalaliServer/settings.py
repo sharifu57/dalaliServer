@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-fp$48&fyad8_#$m!*08mbu*%%7#wz_qz1!f6ju#w9gl-jewatp
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-HOST_IP = '192.168.2.6'
+HOST_IP = '172.23.0.1'
 HOST_ADDR = f"http://{HOST_IP}:7000"
 
 
