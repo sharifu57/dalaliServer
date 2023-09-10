@@ -8,6 +8,12 @@ class OwnerSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    user = OwnerSerializer()
+    class Meta:
+        model = UserProfile
+        fields = "__all__"
+
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
@@ -54,7 +60,7 @@ class TennantVerifyOTPSerializer(serializers.ModelSerializer):
 ###############################################################################33
 
 class PropertiesSerializer(serializers.ModelSerializer):
-    owner = OwnerSerializer()
+    owner = UserProfileSerializer()
     location = LocationSerializer()
     photos = PropertyPhotosSerializer(many=True, read_only=True)
     class Meta:

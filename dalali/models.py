@@ -37,9 +37,9 @@ class UserProfile(MainModel):
     id_number = models.CharField(max_length=300, blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
 
-    def __str__(self):
+    # def __str__(self):
 
-        return self.user.username if user else ''
+    #     return self.gender
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
@@ -62,7 +62,7 @@ PROOPERTY_LOCATION = (
 )
 
 class Property(MainModel):
-    owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    owner = models.ForeignKey(UserProfile, null=True, blank=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=300, null=True, blank=True)
     property_number = models.CharField(max_length=300, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -140,7 +140,7 @@ class Booking(MainModel):
     tennant = models.ForeignKey(Tennant, on_delete=models.CASCADE, null=True, blank=True)
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
-    status = models.IntegerField(choices=BOOKING_STATUS, null=True, blank=True)
+    status = models.IntegerField(choices=BOOKING_STATUS,default=1, null=True, blank=True)
 
     def __str__(self):
         return f"{self.property.title} {self.tennant.last_name}"
