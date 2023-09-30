@@ -12,5 +12,6 @@ router.register(r'owner_properties', PropertiesViewSet, basename='property')
 router.register(r'locations', LocationsViewSet, basename="location")
 router.register(r'location_properties', LocationPropertiesViewSet, basename='location_properties')
 router.register(r'properties_list', PropertyListViewSet, basename='properties_list')
+router.register(r'', CreateNewPropertyViewSet, basename="new_property")
 
 urlpatterns = router.urls

@@ -6,13 +6,16 @@ from django.contrib.auth.models import User
 class OwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = "__all__"
+
 
 class UserProfileSerializer(serializers.ModelSerializer):
     user = OwnerSerializer()
+
     class Meta:
         model = UserProfile
         fields = "__all__"
+
 
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,46 +26,67 @@ class LocationSerializer(serializers.ModelSerializer):
 class PropertyPhotosSerializer(serializers.ModelSerializer):
     class Meta:
         model = PropertyPhoto
-        fields = '__all__'
+        fields = "__all__"
+
 
 class PropertyViewSerializer(serializers.ModelSerializer):
+    owner = UserProfileSerializer()
     location = LocationSerializer()
-    photos = PropertyPhotosSerializer()
+    photos = PropertyPhotosSerializer(many=True, read_only=True)
+
     class Meta:
         model = Property
-        fields = '__all__'
+        fields = "__all__"
 
-        
+
 class PropertySerializer(serializers.ModelSerializer):
     location = LocationSerializer()
     owner = OwnerSerializer()
+
     class Meta:
         model = Property
-        fields = '__all__'
+        fields = "__all__"
+
 
 class PropertyTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PropertyType
-        fields = ['title', 'description', 'icon']
+        fields = "__all__"
 
 
 class TennantRequestOTPSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tennant
-        fields = ['phone_number']
+        fields = ["phone_number"]
 
 
 class TennantVerifyOTPSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tennant
-        fields = [ 'otp','phone_number']
+        fields = ["otp", "phone_number"]
+
 
 ###############################################################################33
+
 
 class PropertiesSerializer(serializers.ModelSerializer):
     owner = UserProfileSerializer()
     location = LocationSerializer()
     photos = PropertyPhotosSerializer(many=True, read_only=True)
+
     class Meta:
         model = Property
         fields = "__all__"
+
+
+class CreatePropertySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Property
+        fields = [
+            "title",
+            "description",
+            "property_type",
+            "price",
+            "location",
+            "owner",
+        ]

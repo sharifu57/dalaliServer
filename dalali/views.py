@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.contrib.auth.models import User
 from rest_framework import generics
+from rest_framework.views import APIView
 import random
 import string
 import pendulum
@@ -25,7 +26,7 @@ class PropertyViewSet(viewsets.ModelViewSet):
     serializer_class = PropertyViewSerializer
     queryset = Property.objects.filter(is_active=True, is_deleted=False).order_by(
         "-created"
-    )
+    )[:5]
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -170,3 +171,31 @@ class LocationPropertiesViewSet(viewsets.GenericViewSet):
 class PropertyListViewSet(viewsets.ModelViewSet):
     queryset = Property.objects.all()
     serializer_class = PropertiesSerializer
+
+
+class CreateNewPropertyViewSet(viewsets.GenericViewSet):
+    serializer_class = CreatePropertySerializer
+    queryset = Property.objects.filter(is_active=True, is_deleted=False)
+
+    @action(detail=False, methods=["POST"])
+    def create_property(self, request):
+        try:
+            serializer = CreatePropertySerializer(data=request.data)
+            print(serializer)
+
+            if serializer.is_valid():
+                property = serializer.save()
+
+                photo = request.data.get("photos", [])
+
+                for p in photo:
+                    # to be emplemented later on 
+                    print("_____here p")
+                    print(p)
+                PropertyPhoto.objects.create(property=property, url=photo)
+                return Response({"message": "Property created successfully"}, status=201)
+
+        except Exception as e:
+            return Response({"message": f"An error occurred: {str(e)}"}, status=500)
+            
+
